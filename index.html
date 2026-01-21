@@ -142,7 +142,7 @@
             letter-spacing: 1px;
         }
 
-        .form-input, .form-select {
+        .form-input {
             width: 100%;
             padding: 16px 20px;
             background: rgba(255, 255, 255, 0.03);
@@ -154,21 +154,7 @@
             transition: all 0.3s ease;
         }
 
-        .form-select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23a0a0a0' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            background-size: 24px;
-        }
-
-        .form-select option {
-            background: var(--primary);
-            color: var(--text);
-        }
-
-        .form-input:focus, .form-select:focus {
+        .form-input:focus {
             outline: none;
             border-color: var(--accent);
             background: rgba(233, 69, 96, 0.05);
@@ -513,7 +499,7 @@
                             </svg>
                         </div>
                         <p class="upload-text">클릭하거나 파일을 드래그하세요</p>
-                        <p class="upload-hint">MP4, MOV, AVI 형식 지원 (최대 100MB)</p>
+                        <p class="upload-hint">MP4, MOV, AVI 형식 지원</p>
                         <input type="file" class="file-input" id="videoFile" accept="video/*" required>
                     </div>
                     <div class="file-preview" id="filePreview">
@@ -562,9 +548,14 @@
 
     <script>
         // ============================================
-        // Google Apps Script URL (설정 완료)
+        // Cloudinary 설정
         // ============================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyMLU6_oQl0zS3FHG-7NXB-gDUvb3D7bOOQTHJH76Ny3Nf9y29LFhNkf7-leFaku2IC/exec';
+        const CLOUDINARY_CLOUD_NAME = 'dyyodzjwc';
+        const CLOUDINARY_UPLOAD_PRESET = 'default';
+        const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`;
+        
+        // Google Apps Script URL (기록 저장용)
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXNQRbU6b-dljXEl2LAV2QfuKQDKM0KGbpDYvmp6EV3caz9K2M072OBDZjJyw3o8bk/exec';
         // ============================================
 
         // 오늘 날짜 기본값 설정
@@ -678,24 +669,11 @@
             setTimeout(() => toast.classList.remove('visible'), 5000);
         }
 
-        // 파일을 Base64로 변환
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                    const base64 = reader.result.split(',')[1];
-                    resolve(base64);
-                };
-                reader.onerror = error => reject(error);
-            });
-        }
-
         // 폼 제출
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const playerName = document.getElementById('playerName').value;
+            const playerName = document.getElementById('playerName').value.trim();
             const uploadDate = document.getElementById('uploadDate').value;
             const videoTitle = document.getElementById('videoTitle').value.trim();
             const videoFile = fileInput.files[0];
@@ -705,47 +683,63 @@
                 return;
             }
 
-            // 파일 크기 체크 (100MB)
-            if (videoFile.size > 100 * 1024 * 1024) {
-                showToast('파일 크기는 100MB 이하여야 합니다', 'error');
-                return;
-            }
-
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
             progressContainer.classList.add('visible');
             progressFill.style.width = '0%';
-            progressText.textContent = '파일 준비 중...';
+            progressText.textContent = '업로드 준비 중...';
 
             try {
-                // 파일을 Base64로 변환
-                progressText.textContent = '파일 변환 중...';
-                progressFill.style.width = '20%';
+                // 1. Cloudinary에 영상 업로드
+                const publicId = `${uploadDate}_${playerName}_${videoTitle}`.replace(/[^a-zA-Z0-9가-힣_-]/g, '_');
                 
-                const base64Data = await fileToBase64(videoFile);
+                const formData = new FormData();
+                formData.append('file', videoFile);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                formData.append('public_id', publicId);
+                formData.append('folder', `returnsfc/${playerName}`);
+
+                progressText.textContent = '영상 업로드 중...';
+
+                const xhr = new XMLHttpRequest();
                 
-                progressText.textContent = '업로드 중...';
-                progressFill.style.width = '50%';
+                // 업로드 진행률 표시
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 90);
+                        progressFill.style.width = percent + '%';
+                        progressText.textContent = `업로드 중... ${percent}%`;
+                    }
+                });
 
-                // 파일명 생성
-                const ext = videoFile.name.split('.').pop();
-                const newFileName = `${uploadDate}_${playerName}_${videoTitle}.${ext}`;
+                const cloudinaryResult = await new Promise((resolve, reject) => {
+                    xhr.open('POST', CLOUDINARY_URL);
+                    xhr.onload = () => {
+                        if (xhr.status === 200) {
+                            resolve(JSON.parse(xhr.responseText));
+                        } else {
+                            reject(new Error('Cloudinary 업로드 실패'));
+                        }
+                    };
+                    xhr.onerror = () => reject(new Error('네트워크 오류'));
+                    xhr.send(formData);
+                });
 
-                // Google Apps Script로 전송
+                progressFill.style.width = '95%';
+                progressText.textContent = '기록 저장 중...';
+
+                // 2. Google Sheets에 기록 저장
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify({
                         playerName: playerName,
                         uploadDate: uploadDate,
                         videoTitle: videoTitle,
-                        fileName: newFileName,
-                        mimeType: videoFile.type,
-                        fileData: base64Data
+                        fileUrl: cloudinaryResult.secure_url,
+                        fileId: cloudinaryResult.public_id
                     })
                 });
 
-                progressFill.style.width = '90%';
-                
                 const result = await response.json();
                 
                 if (result.success) {
@@ -763,7 +757,7 @@
                         progressContainer.classList.remove('visible');
                     }, 1500);
                 } else {
-                    throw new Error(result.message || '업로드 실패');
+                    throw new Error(result.message || '기록 저장 실패');
                 }
 
             } catch (error) {
