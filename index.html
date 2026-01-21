@@ -486,12 +486,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">영상 제목</label>
+                    <label class="form-label">제목</label>
                     <input type="text" class="form-input" id="videoTitle" placeholder="예: 개인 볼 컨트롤 훈련" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">영상 파일</label>
+                    <label class="form-label">파일</label>
                     <div class="upload-area" id="uploadArea">
                         <div class="upload-icon">
                             <svg viewBox="0 0 24 24">
@@ -499,8 +499,9 @@
                             </svg>
                         </div>
                         <p class="upload-text">클릭하거나 파일을 드래그하세요</p>
-                        <p class="upload-hint">MP4, MOV, AVI 형식 지원</p>
-                        <input type="file" class="file-input" id="videoFile" accept="video/*" required>
+                        <p class="upload-hint">영상(MP4, MOV) 또는 이미지(JPG, PNG) 지원</p>
+                        <input type="file" class="file-input" id="videoFile" accept="video/*,image/*" required>
+                    </div>
                     </div>
                     <div class="file-preview" id="filePreview">
                         <div class="file-preview-icon">
@@ -552,10 +553,15 @@
         // ============================================
         const CLOUDINARY_CLOUD_NAME = 'dyyodzjwc';
         const CLOUDINARY_UPLOAD_PRESET = 'default';
-        const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/video/upload`;
         
         // Google Apps Script URL (기록 저장용)
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXNQRbU6b-dljXEl2LAV2QfuKQDKM0KGbpDYvmp6EV3caz9K2M072OBDZjJyw3o8bk/exec';
+        
+        // Cloudinary URL 생성 함수
+        function getCloudinaryUrl(fileType) {
+            const resourceType = fileType.startsWith('image/') ? 'image' : 'video';
+            return `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
+        }
         // ============================================
 
         // 오늘 날짜 기본값 설정
@@ -620,7 +626,7 @@
             e.preventDefault();
             uploadArea.classList.remove('drag-over');
             const files = e.dataTransfer.files;
-            if (files.length > 0 && files[0].type.startsWith('video/')) {
+            if (files.length > 0 && (files[0].type.startsWith('video/') || files[0].type.startsWith('image/'))) {
                 fileInput.files = files;
                 showFilePreview(files[0]);
             }
@@ -694,8 +700,10 @@
             progressText.textContent = '업로드 준비 중...';
 
             try {
-                // 1. Cloudinary에 영상 업로드
+                // 1. Cloudinary에 파일 업로드
                 const publicId = `${uploadDate}_${playerName}_${videoTitle}`.replace(/[^a-zA-Z0-9가-힣_-]/g, '_');
+                const isImage = videoFile.type.startsWith('image/');
+                const cloudinaryUrl = getCloudinaryUrl(videoFile.type);
                 
                 const formData = new FormData();
                 formData.append('file', videoFile);
@@ -703,7 +711,7 @@
                 formData.append('public_id', publicId);
                 formData.append('folder', `returnsfc/${playerName}`);
 
-                progressText.textContent = '영상 업로드 중...';
+                progressText.textContent = isImage ? '이미지 업로드 중...' : '영상 업로드 중...';
 
                 const xhr = new XMLHttpRequest();
                 
@@ -717,7 +725,7 @@
                 });
 
                 const cloudinaryResult = await new Promise((resolve, reject) => {
-                    xhr.open('POST', CLOUDINARY_URL);
+                    xhr.open('POST', cloudinaryUrl);
                     xhr.onload = () => {
                         if (xhr.status === 200) {
                             resolve(JSON.parse(xhr.responseText));
