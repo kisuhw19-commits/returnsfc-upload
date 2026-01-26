@@ -8,12 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --primary: #1a1a2e;
             --secondary: #16213e;
@@ -24,9 +19,7 @@
             --surface: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
             --success: #4ade80;
-            --warning: #fbbf24;
         }
-
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, #0f0f23 100%);
@@ -34,20 +27,15 @@
             color: var(--text);
             overflow-x: hidden;
         }
-
         .bg-pattern {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-image: 
                 radial-gradient(circle at 20% 80%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(233, 69, 96, 0.08) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -55,37 +43,31 @@
             position: relative;
             z-index: 1;
         }
-
         .header {
             text-align: center;
             margin-bottom: 40px;
             animation: fadeInDown 0.8s ease-out;
         }
-
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .logo {
             display: inline-flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 16px;
         }
-
         .logo-emblem {
             width: 80px;
             height: 80px;
             object-fit: contain;
             filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
         }
-
         .title {
             font-family: 'Black Han Sans', sans-serif;
             font-size: 2rem;
@@ -94,7 +76,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .admin-badge {
             display: inline-block;
             background: var(--accent);
@@ -106,7 +87,6 @@
             vertical-align: middle;
             font-weight: 600;
         }
-
         .back-btn {
             position: absolute;
             top: 40px;
@@ -123,18 +103,32 @@
             align-items: center;
             gap: 8px;
         }
-
         .back-btn:hover {
             background: var(--accent);
             border-color: var(--accent);
         }
-
-        .back-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
+        .back-btn svg { width: 16px; height: 16px; fill: currentColor; }
+        .video-link-btn {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-
+        .video-link-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        .video-link-btn svg { width: 16px; height: 16px; fill: currentColor; }
         .stats-summary {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -142,7 +136,6 @@
             margin-bottom: 24px;
             animation: fadeInUp 0.8s ease-out 0.1s both;
         }
-
         .stat-card {
             background: var(--surface);
             backdrop-filter: blur(20px);
@@ -151,20 +144,17 @@
             padding: 20px;
             text-align: center;
         }
-
         .stat-value {
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--accent);
             line-height: 1;
         }
-
         .stat-label {
             font-size: 0.85rem;
             color: var(--text-muted);
             margin-top: 8px;
         }
-
         .card {
             background: var(--surface);
             backdrop-filter: blur(20px);
@@ -173,7 +163,6 @@
             padding: 28px;
             animation: fadeInUp 0.8s ease-out 0.2s both;
         }
-
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -182,12 +171,10 @@
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
-
         .card-title {
             font-size: 1.2rem;
             font-weight: 600;
         }
-
         .refresh-btn {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -201,33 +188,19 @@
             align-items: center;
             gap: 6px;
         }
-
         .refresh-btn:hover {
             background: var(--accent);
             border-color: var(--accent);
         }
-
-        .refresh-btn svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
-        }
-
-        .refresh-btn.loading svg {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
+        .refresh-btn svg { width: 14px; height: 14px; fill: currentColor; }
+        .refresh-btn.loading svg { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         .month-selector {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 20px;
         }
-
         .month-btn {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -241,26 +214,17 @@
             justify-content: center;
             transition: all 0.3s ease;
         }
-
         .month-btn:hover {
             background: var(--accent);
             border-color: var(--accent);
         }
-
-        .month-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
+        .month-btn svg { width: 16px; height: 16px; fill: currentColor; }
         .current-month {
             font-size: 1rem;
             font-weight: 500;
             min-width: 120px;
             text-align: center;
         }
-
-        /* 월간 표 스타일 */
         .table-container {
             overflow-x: auto;
             overflow-y: auto;
@@ -268,13 +232,11 @@
             border-radius: 12px;
             border: 1px solid var(--border);
         }
-
         .calendar-table {
             width: 100%;
             border-collapse: collapse;
             min-width: 800px;
         }
-
         .calendar-table th,
         .calendar-table td {
             padding: 12px 8px;
@@ -282,19 +244,16 @@
             border: 1px solid var(--border);
             white-space: nowrap;
         }
-
         .calendar-table thead {
             position: sticky;
             top: 0;
             z-index: 2;
         }
-
         .calendar-table th {
             background: var(--secondary);
             font-weight: 600;
             font-size: 0.85rem;
         }
-
         .calendar-table th.player-col {
             position: sticky;
             left: 0;
@@ -302,7 +261,6 @@
             background: var(--secondary);
             min-width: 100px;
         }
-
         .calendar-table td.player-name-cell {
             position: sticky;
             left: 0;
@@ -312,15 +270,8 @@
             text-align: left;
             padding-left: 16px;
         }
-
-        .calendar-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .calendar-table tbody tr:hover td.player-name-cell {
-            background: var(--secondary);
-        }
-
+        .calendar-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+        .calendar-table tbody tr:hover td.player-name-cell { background: var(--secondary); }
         .check-mark {
             display: inline-flex;
             align-items: center;
@@ -332,36 +283,20 @@
             color: white;
             font-size: 0.9rem;
         }
-
-        .empty-cell {
-            color: var(--border);
-        }
-
+        .empty-cell { color: var(--border); }
         .total-cell {
             font-weight: 700;
             color: var(--accent);
             background: rgba(233, 69, 96, 0.1) !important;
         }
-
-        .date-header {
-            font-size: 0.8rem;
-        }
-
-        .date-header .day {
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        .date-header.weekend {
-            color: var(--accent);
-        }
-
+        .date-header { font-size: 0.8rem; }
+        .date-header .day { font-size: 1rem; font-weight: 700; }
+        .date-header.weekend { color: var(--accent); }
         .loading-state, .empty-state, .error-state {
             text-align: center;
             padding: 60px 20px;
             color: var(--text-muted);
         }
-
         .loading-state .spinner {
             width: 48px;
             height: 48px;
@@ -371,28 +306,174 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 16px;
         }
-
         .empty-state svg {
             width: 64px;
             height: 64px;
             fill: var(--border);
             margin-bottom: 16px;
         }
-
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--primary);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s;
+        }
+        .modal-close:hover { color: var(--accent); }
+        .modal-close svg { width: 24px; height: 24px; fill: currentColor; }
+        .category-section {
+            margin-bottom: 24px;
+        }
+        .category-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+        .video-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .video-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .video-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .video-input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+        .add-video-btn {
+            padding: 12px 16px;
+            background: var(--success);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .add-video-btn:hover { background: #22c55e; }
+        .add-video-btn svg { width: 20px; height: 20px; fill: white; }
+        .video-list-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .video-list-item span {
+            flex: 1;
+            font-size: 0.85rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .delete-video-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 4px;
+        }
+        .delete-video-btn:hover { color: var(--accent-light); }
+        .delete-video-btn svg { width: 16px; height: 16px; fill: currentColor; }
+        .save-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.3s;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(233, 69, 96, 0.4);
+        }
         @media (max-width: 600px) {
             .stats-summary { grid-template-columns: 1fr; }
-            .back-btn { position: relative; top: 0; left: 0; margin-bottom: 20px; }
+            .back-btn, .video-link-btn {
+                position: relative;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin-bottom: 10px;
+            }
             .table-container { max-height: 400px; }
         }
     </style>
 </head>
 <body>
     <div class="bg-pattern"></div>
-    
     <div class="container">
         <button class="back-btn" onclick="location.href='index.html'">
             <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
             돌아가기
+        </button>
+
+        <button class="video-link-btn" onclick="openModal()">
+            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+            영상 링크 관리
         </button>
 
         <header class="header">
@@ -425,7 +506,6 @@
                     새로고침
                 </button>
             </div>
-
             <div class="month-selector">
                 <button class="month-btn" id="prevMonth">
                     <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
@@ -435,7 +515,6 @@
                     <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
                 </button>
             </div>
-
             <div class="table-container" id="calendarContainer">
                 <div class="loading-state">
                     <div class="spinner"></div>
@@ -445,10 +524,34 @@
         </div>
     </div>
 
+    <!-- 영상 링크 관리 모달 -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🎬 카테고리별 영상 링크 관리</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+
+            <div id="categoryForms"></div>
+
+            <button class="save-btn" onclick="saveVideoLinks()">💾 저장하기</button>
+        </div>
+    </div>
+
     <script>
-        // ============================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKQpSjttc9zkz1tplDWjcCN6O78wiYQjfYO0fC7rt0uoUz8AafQspzmbUGD6pv0dhw/exec';
-        // ============================================
+
+        const CATEGORIES = [
+            { id: 'match', name: '경기' },
+            { id: 'dynamic', name: '동적 스트레칭' },
+            { id: 'lower', name: '하체' },
+            { id: 'upper', name: '상체' },
+            { id: 'core', name: '복근' }
+        ];
+
+        let videoLinks = {};
 
         let currentDate = new Date();
         let allRecords = [];
@@ -510,23 +613,17 @@
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
 
-            // 선수별 업로드 일자 정리
             const playerUploads = {};
             monthRecords.forEach(record => {
                 const name = record.playerName;
-                if (!playerUploads[name]) {
-                    playerUploads[name] = {};
-                }
+                if (!playerUploads[name]) playerUploads[name] = {};
                 const day = new Date(record.uploadDate).getDate();
-                if (!playerUploads[name][day]) {
-                    playerUploads[name][day] = 0;
-                }
+                if (!playerUploads[name][day]) playerUploads[name][day] = 0;
                 playerUploads[name][day]++;
             });
 
             const players = Object.keys(playerUploads).sort();
 
-            // 통계 업데이트
             document.getElementById('totalPlayers').textContent = players.length;
             document.getElementById('totalUploads').textContent = monthRecords.length;
             document.getElementById('avgUploads').textContent = players.length > 0 ? (monthRecords.length / players.length).toFixed(1) : '0';
@@ -538,7 +635,6 @@
 
             const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
 
-            // 헤더 생성
             let headerHTML = '<tr><th class="player-col">선수</th>';
             for (let d = 1; d <= daysInMonth; d++) {
                 const dow = getDayOfWeek(year, month, d);
@@ -547,7 +643,6 @@
             }
             headerHTML += '<th>합계</th></tr>';
 
-            // 바디 생성
             let bodyHTML = '';
             players.forEach(player => {
                 let total = 0;
@@ -572,7 +667,6 @@
             `;
         }
 
-        // 월 변경
         function updateMonth(delta) {
             currentDate.setMonth(currentDate.getMonth() + delta);
             document.getElementById('currentMonth').textContent = getMonthDisplay(currentDate);
@@ -581,6 +675,83 @@
 
         document.getElementById('prevMonth').addEventListener('click', () => updateMonth(-1));
         document.getElementById('nextMonth').addEventListener('click', () => updateMonth(1));
+
+        // 영상 링크 관리 모달
+        function openModal() {
+            loadVideoLinks();
+            renderCategoryForms();
+            document.getElementById('videoModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('videoModal').classList.remove('active');
+        }
+
+        function loadVideoLinks() {
+            const stored = localStorage.getItem('returnsfc_video_links');
+            videoLinks = stored ? JSON.parse(stored) : {};
+        }
+
+        function renderCategoryForms() {
+            const container = document.getElementById('categoryForms');
+            container.innerHTML = CATEGORIES.map(cat => {
+                const videos = videoLinks[cat.id] || [];
+                return `
+                    <div class="category-section">
+                        <div class="category-title">${cat.name}</div>
+                        <div class="video-input-group">
+                            <input type="text" class="video-input" id="title-${cat.id}" placeholder="영상 제목">
+                            <input type="text" class="video-input" id="url-${cat.id}" placeholder="영상 URL (YouTube, 드라이브 등)">
+                            <button class="add-video-btn" onclick="addVideo('${cat.id}')">
+                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                            </button>
+                        </div>
+                        <div id="list-${cat.id}">
+                            ${videos.map((v, i) => `
+                                <div class="video-list-item">
+                                    <span>${v.title || '영상 ' + (i+1)}: ${v.url}</span>
+                                    <button class="delete-video-btn" onclick="deleteVideo('${cat.id}', ${i})">
+                                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addVideo(categoryId) {
+            const titleInput = document.getElementById(`title-${categoryId}`);
+            const urlInput = document.getElementById(`url-${categoryId}`);
+            const title = titleInput.value.trim();
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                alert('URL을 입력해주세요');
+                return;
+            }
+
+            if (!videoLinks[categoryId]) videoLinks[categoryId] = [];
+            videoLinks[categoryId].push({ title: title || '영상', url: url });
+
+            titleInput.value = '';
+            urlInput.value = '';
+            renderCategoryForms();
+        }
+
+        function deleteVideo(categoryId, index) {
+            if (videoLinks[categoryId]) {
+                videoLinks[categoryId].splice(index, 1);
+                renderCategoryForms();
+            }
+        }
+
+        function saveVideoLinks() {
+            localStorage.setItem('returnsfc_video_links', JSON.stringify(videoLinks));
+            alert('저장되었습니다!');
+            closeModal();
+        }
 
         // 초기화
         document.getElementById('currentMonth').textContent = getMonthDisplay(currentDate);
