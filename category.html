@@ -157,9 +157,7 @@
             color: var(--accent);
             font-weight: 600;
         }
-        .video-section {
-            margin-top: 24px;
-        }
+        .video-section { margin-top: 24px; }
         .video-section-title {
             font-size: 1rem;
             font-weight: 600;
@@ -205,26 +203,11 @@
             justify-content: center;
             flex-shrink: 0;
         }
-        .video-item-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
+        .video-item-icon svg { width: 24px; height: 24px; fill: white; }
         .video-item-info { flex: 1; }
-        .video-item-title {
-            font-weight: 500;
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-        }
-        .video-item-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-        .video-item-arrow {
-            width: 24px;
-            height: 24px;
-            fill: var(--text-muted);
-        }
+        .video-item-title { font-weight: 500; font-size: 0.95rem; margin-bottom: 4px; }
+        .video-item-desc { font-size: 0.8rem; color: var(--text-muted); }
+        .video-item-arrow { width: 24px; height: 24px; fill: var(--text-muted); }
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -236,6 +219,21 @@
             fill: var(--border);
             margin-bottom: 12px;
         }
+        .loading-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .loading-state .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 600px) {
             .back-btn {
                 position: relative;
@@ -311,6 +309,8 @@
     </div>
 
     <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdloqTYG3GXr65RhBiY4DbMGCwO6WzABijWeT-Cs1PyChGwr1Y0wIVIYDJWCBRBPmf/exec';
+
         const CATEGORY_NAMES = {
             'match': '경기',
             'dynamic': '동적 스트레칭',
@@ -320,16 +320,24 @@
             'core': '복근'
         };
 
-        // localStorage에서 영상 링크 가져오기
-        function getVideoLinks() {
-            const stored = localStorage.getItem('returnsfc_video_links');
-            return stored ? JSON.parse(stored) : {};
+        let videoLinks = {};
+
+        // Google Sheets에서 영상 링크 불러오기
+        async function loadVideoLinks() {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getVideoLinks');
+                const result = await response.json();
+                if (result.success) {
+                    videoLinks = result.videoLinks || {};
+                }
+            } catch (error) {
+                console.error('Load error:', error);
+            }
         }
 
         // 카테고리 클릭 이벤트
         document.querySelectorAll('.day-cell').forEach(cell => {
             cell.addEventListener('click', function() {
-                // 활성화 상태 토글
                 document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('active'));
                 this.classList.add('active');
 
@@ -341,7 +349,6 @@
                     <span>${categoryName} 영상</span>
                 `;
 
-                const videoLinks = getVideoLinks();
                 const videos = videoLinks[category] || [];
 
                 if (category === 'rest') {
@@ -378,6 +385,9 @@
                 `).join('');
             });
         });
+
+        // 페이지 로드 시 영상 링크 불러오기
+        loadVideoLinks();
     </script>
 </body>
 </html>
